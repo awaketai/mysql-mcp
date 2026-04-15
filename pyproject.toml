@@ -1,0 +1,30 @@
+[project]
+name = "mysql-mcp"
+version = "0.1.0"
+description = "MySQL MCP Server — natural language to SQL via OpenAI"
+requires-python = ">=3.11"
+dependencies = [
+    "fastmcp>=3.0",
+    "aiomysql>=0.2",
+    "sqlglot[c]>=26.0",
+    "openai>=1.0",
+    "pydantic>=2.0",
+    "pydantic-settings>=2.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.24",
+]
+
+[project.scripts]
+mysql-mcp = "mysql_mcp.__main__:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
