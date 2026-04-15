@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from mysql_mcp.llm.client import LLMClient
+from src.llm.client import LLMClient
 
 
 class AIResultValidator:

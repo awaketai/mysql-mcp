@@ -6,15 +6,15 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from mysql_mcp.models.schema import (
+from src.models.schema import (
     ColumnInfo,
     DatabaseSchema,
     SchemaCache,
     TableSchema,
     ViewSchema,
 )
-from mysql_mcp.tools.describe_schema import describe_schema
-from mysql_mcp.tools.list_databases import list_databases
+from src.tools.describe_schema import describe_schema
+from src.tools.list_databases import list_databases
 
 
 def _make_ctx(lifespan_context: dict) -> MagicMock:

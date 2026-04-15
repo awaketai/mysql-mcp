@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from mysql_mcp.models.schema import ColumnInfo, DatabaseSchema, SchemaCache, TableSchema
+from src.models.schema import ColumnInfo, DatabaseSchema, SchemaCache, TableSchema
 
 SYSTEM_TEMPLATE = """\
 You are an expert MySQL SQL generator. Given a natural language query \

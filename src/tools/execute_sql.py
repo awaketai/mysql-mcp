@@ -6,9 +6,9 @@ import logging
 
 from fastmcp import Context
 
-from mysql_mcp.db.pool import execute_query
-from mysql_mcp.models.response import ErrorResponse, SQLResult
-from mysql_mcp.security.validator import SQLValidationError, SQLValidator
+from src.db.pool import execute_query
+from src.models.response import ErrorResponse, SQLResult
+from src.security.validator import SQLValidationError, SQLValidator
 
 logger = logging.getLogger(__name__)
 

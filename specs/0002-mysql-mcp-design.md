@@ -64,9 +64,9 @@
 ## 3. 项目结构
 
 ```
-mysql_mcp/
+src/
 ├── __init__.py              # 包初始化，暴露版本号
-├── __main__.py              # python -m mysql_mcp 入口
+├── __main__.py              # python -m src 入口
 ├── server.py                # FastMCP 实例创建、Lifespan 定义、Tool 注册
 ├── config.py                # Pydantic Settings 配置模型
 │
@@ -294,10 +294,10 @@ from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 
 from fastmcp import FastMCP, Context
-from mysql_mcp.config import AppConfig
-from mysql_mcp.db.pool import create_pool, close_pool
-from mysql_mcp.db.schema import SchemaManager
-from mysql_mcp.llm.client import LLMClient
+from src.config import AppConfig
+from src.db.pool import create_pool, close_pool
+from src.db.schema import SchemaManager
+from src.llm.client import LLMClient
 
 
 @asynccontextmanager
@@ -346,7 +346,7 @@ mcp = FastMCP("MySQL MCP Server", lifespan=app_lifespan)
 
 ```python
 import aiomysql
-from mysql_mcp.config import MySQLConfig
+from src.config import MySQLConfig
 
 
 async def create_pool(config: MySQLConfig) -> aiomysql.Pool:
@@ -400,8 +400,8 @@ from datetime import UTC, datetime
 
 import aiomysql
 
-from mysql_mcp.config import AppConfig
-from mysql_mcp.models.schema import (
+from src.config import AppConfig
+from src.models.schema import (
     ColumnInfo,
     DatabaseSchema,
     EnumTypeInfo,
@@ -565,7 +565,7 @@ class SchemaManager:
 ```python
 from openai import AsyncOpenAI
 
-from mysql_mcp.config import OpenAIConfig
+from src.config import OpenAIConfig
 
 
 class LLMClient:
@@ -607,7 +607,7 @@ class LLMClient:
 实现两阶段 Schema 筛选和分层 Prompt 构建。
 
 ```python
-from mysql_mcp.models.schema import DatabaseSchema, SchemaCache
+from src.models.schema import DatabaseSchema, SchemaCache
 
 
 SYSTEM_TEMPLATE = """You are an expert MySQL SQL generator. Given a natural language query \
@@ -735,7 +735,7 @@ class SQLValidator:
 ### 5.7 AI 结果验证 — `llm/validator.py`
 
 ```python
-from mysql_mcp.llm.client import LLMClient
+from src.llm.client import LLMClient
 
 
 class AIResultValidator:
@@ -767,7 +767,7 @@ class AIResultValidator:
 
 ```python
 # server.py 中的注册方式
-from mysql_mcp.tools import query, list_databases, describe_schema, execute_sql
+from src.tools import query, list_databases, describe_schema, execute_sql
 
 mcp.tool(query)
 mcp.tool(list_databases)
@@ -780,7 +780,7 @@ mcp.tool(execute_sql)
 ```python
 from fastmcp import Context
 
-from mysql_mcp.models.response import BothResponse, SQLResponse, SQLResult
+from src.models.response import BothResponse, SQLResponse, SQLResult
 
 
 async def query(
@@ -942,8 +942,8 @@ query(natural_language, database?, return_type?)
 ```python
 import logging
 
-from mysql_mcp.server import mcp
-from mysql_mcp.config import AppConfig
+from src.server import mcp
+from src.config import AppConfig
 
 
 def main() -> None:
@@ -966,7 +966,7 @@ if __name__ == "__main__":
   "mcpServers": {
     "mysql": {
       "command": "python",
-      "args": ["-m", "mysql_mcp"],
+      "args": ["-m", "src"],
       "env": {
         "MYSQL_HOST": "localhost",
         "MYSQL_PORT": "3306",
@@ -999,7 +999,7 @@ dependencies = [
 ]
 
 [project.scripts]
-mysql-mcp = "mysql_mcp.__main__:main"
+mysql-mcp = "src.__main__:main"
 ```
 
 > 注：`sqlglot[rs]` 使用 Rust 加速的解析器后端，提升 SQL 解析性能。Pydantic 2.x 已是 FastMCP 的依赖，无需重复安装，但为了语义明确保留声明。

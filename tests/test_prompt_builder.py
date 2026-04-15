@@ -1,11 +1,11 @@
-"""Tests for mysql_mcp.llm.prompt."""
+"""Tests for src.llm.prompt."""
 
 from __future__ import annotations
 
 import pytest
 
-from mysql_mcp.llm.prompt import PromptBuilder
-from mysql_mcp.models.schema import (
+from src.llm.prompt import PromptBuilder
+from src.models.schema import (
     ColumnInfo,
     DatabaseSchema,
     ForeignKeyInfo,

@@ -1,11 +1,11 @@
-"""Entry point for ``python -m mysql_mcp``."""
+"""Entry point for ``python -m src``."""
 
 from __future__ import annotations
 
 import logging
 
-from mysql_mcp.config import AppConfig
-from mysql_mcp.server import mcp
+from src.config import AppConfig
+from src.server import mcp
 
 
 def main() -> None:

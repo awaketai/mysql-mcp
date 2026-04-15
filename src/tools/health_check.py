@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from fastmcp import Context
 
-from mysql_mcp.models.response import ErrorResponse
+from src.models.response import ErrorResponse
 
 
 async def health_check(ctx: Context) -> dict:

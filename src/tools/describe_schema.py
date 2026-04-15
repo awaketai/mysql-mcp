@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from fastmcp import Context
 
-from mysql_mcp.models.response import DescribeSchemaResponse, ErrorResponse
+from src.models.response import DescribeSchemaResponse, ErrorResponse
 
 
 async def describe_schema(

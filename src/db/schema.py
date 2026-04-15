@@ -8,8 +8,8 @@ import re
 
 import aiomysql
 
-from mysql_mcp.config import AppConfig
-from mysql_mcp.models.schema import (
+from src.config import AppConfig
+from src.models.schema import (
     ColumnInfo,
     DatabaseSchema,
     EnumTypeInfo,

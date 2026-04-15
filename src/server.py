@@ -8,15 +8,15 @@ from contextlib import asynccontextmanager
 
 from fastmcp import FastMCP
 
-from mysql_mcp.config import AppConfig
-from mysql_mcp.db.pool import close_pool, create_pool
-from mysql_mcp.db.schema import SchemaManager
-from mysql_mcp.llm.client import LLMClient
-from mysql_mcp.tools.describe_schema import describe_schema
-from mysql_mcp.tools.execute_sql import execute_sql
-from mysql_mcp.tools.health_check import health_check
-from mysql_mcp.tools.list_databases import list_databases
-from mysql_mcp.tools.query import query
+from src.config import AppConfig
+from src.db.pool import close_pool, create_pool
+from src.db.schema import SchemaManager
+from src.llm.client import LLMClient
+from src.tools.describe_schema import describe_schema
+from src.tools.execute_sql import execute_sql
+from src.tools.health_check import health_check
+from src.tools.list_databases import list_databases
+from src.tools.query import query
 
 logger = logging.getLogger(__name__)
 

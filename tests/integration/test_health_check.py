@@ -7,8 +7,8 @@ from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
-from mysql_mcp.config import AppConfig
-from mysql_mcp.tools.health_check import health_check
+from src.config import AppConfig
+from src.tools.health_check import health_check
 
 
 class _MockCursor:

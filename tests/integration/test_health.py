@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-from mysql_mcp.security.validator import SQLValidationError, SQLValidator
+from src.security.validator import SQLValidationError, SQLValidator
 
 
 @pytest.fixture()

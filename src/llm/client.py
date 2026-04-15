@@ -7,7 +7,7 @@ import re
 
 from openai import AsyncOpenAI
 
-from mysql_mcp.config import OpenAIConfig
+from src.config import OpenAIConfig
 
 logger = logging.getLogger(__name__)
 

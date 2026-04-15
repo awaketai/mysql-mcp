@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from fastmcp import Context
 
-from mysql_mcp.models.response import ListDatabasesResponse
+from src.models.response import ListDatabasesResponse
 
 
 async def list_databases(ctx: Context) -> dict:

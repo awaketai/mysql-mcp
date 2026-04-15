@@ -1,4 +1,4 @@
-"""Tests for mysql_mcp.llm.validator."""
+"""Tests for src.llm.validator."""
 
 from __future__ import annotations
 
@@ -6,7 +6,7 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
-from mysql_mcp.llm.validator import AIResultValidator
+from src.llm.validator import AIResultValidator
 
 
 @pytest.fixture()

@@ -1,4 +1,4 @@
-"""Tests for mysql_mcp.config."""
+"""Tests for src.config."""
 
 from __future__ import annotations
 
@@ -8,7 +8,7 @@ from unittest.mock import patch
 import pytest
 from pydantic import ValidationError
 
-from mysql_mcp.config import AppConfig, MySQLConfig, OpenAIConfig
+from src.config import AppConfig, MySQLConfig, OpenAIConfig
 
 
 class TestMySQLConfig:

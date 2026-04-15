@@ -1,4 +1,4 @@
-"""Tests for mysql_mcp.db.schema."""
+"""Tests for src.db.schema."""
 
 from __future__ import annotations
 
@@ -7,9 +7,9 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from mysql_mcp.config import AppConfig
-from mysql_mcp.db.schema import SchemaManager, _parse_enum_values, _tokenize
-from mysql_mcp.models.schema import (
+from src.config import AppConfig
+from src.db.schema import SchemaManager, _parse_enum_values, _tokenize
+from src.models.schema import (
     ColumnInfo,
     DatabaseSchema,
     ForeignKeyInfo,

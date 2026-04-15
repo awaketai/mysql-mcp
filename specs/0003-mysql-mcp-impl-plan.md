@@ -17,19 +17,19 @@
 **创建文件**：
 - `pyproject.toml`
 - `.gitignore`
-- `mysql_mcp/__init__.py`
-- `mysql_mcp/db/__init__.py`
-- `mysql_mcp/models/__init__.py`
-- `mysql_mcp/llm/__init__.py`
-- `mysql_mcp/security/__init__.py`
-- `mysql_mcp/tools/__init__.py`
+- `src/__init__.py`
+- `src/db/__init__.py`
+- `src/models/__init__.py`
+- `src/llm/__init__.py`
+- `src/security/__init__.py`
+- `src/tools/__init__.py`
 
 **实现内容**：
-- `pyproject.toml`：项目元数据、依赖声明（fastmcp, aiomysql, sqlglot[rs], openai, pydantic, pydantic-settings）、入口点 `mysql-mcp = "mysql_mcp.__main__:main"`
+- `pyproject.toml`：项目元数据、依赖声明（fastmcp, aiomysql, sqlglot[rs], openai, pydantic, pydantic-settings）、入口点 `mysql-mcp = "src.__main__:main"`
 - `.gitignore`：Python 标准 gitignore + `.env`
 - 各 `__init__.py`：空文件或 `__version__ = "0.1.0"`
 
-**验证**：`pip install -e .` 成功，`python -c "import mysql_mcp"` 无报错
+**验证**：`pip install -e .` 成功，`python -c "import src"` 无报错
 
 **依赖**：无
 
@@ -40,7 +40,7 @@
 **目标**：实现 `MySQLConfig`、`OpenAIConfig`、`AppConfig`
 
 **创建文件**：
-- `mysql_mcp/config.py`
+- `src/config.py`
 - `tests/test_config.py`
 
 **实现内容**：
@@ -64,7 +64,7 @@
 **目标**：实现 Schema 缓存的全部 Pydantic 模型
 
 **创建文件**：
-- `mysql_mcp/models/schema.py`
+- `src/models/schema.py`
 - `tests/test_schema_models.py`
 
 **实现内容**：
@@ -92,7 +92,7 @@
 **目标**：实现 MCP Tool 返回值的 Pydantic 模型
 
 **创建文件**：
-- `mysql_mcp/models/response.py`
+- `src/models/response.py`
 - `tests/test_response_models.py`
 
 **实现内容**：
@@ -118,7 +118,7 @@
 **目标**：实现 aiomysql 连接池的创建、关闭和查询执行
 
 **创建文件**：
-- `mysql_mcp/db/pool.py`
+- `src/db/pool.py`
 - `tests/test_pool.py`
 
 **实现内容**：
@@ -140,7 +140,7 @@
 **目标**：实现基于 sqlglot 的 SQL 安全校验器
 
 **创建文件**：
-- `mysql_mcp/security/validator.py`
+- `src/security/validator.py`
 - `tests/test_sql_validator.py`
 
 **实现内容**：
@@ -177,7 +177,7 @@
 **目标**：实现 Schema 发现、缓存、增量刷新和候选表筛选
 
 **创建文件**：
-- `mysql_mcp/db/schema.py`
+- `src/db/schema.py`
 - `tests/test_schema_manager.py`
 
 **实现内容**：
@@ -225,7 +225,7 @@
 **目标**：封装 AsyncOpenAI，提供 SQL 生成和结果验证接口
 
 **创建文件**：
-- `mysql_mcp/llm/client.py`
+- `src/llm/client.py`
 - `tests/test_llm_client.py`
 
 **实现内容**：
@@ -250,7 +250,7 @@
 **目标**：实现两阶段 Schema 筛选和分层 Prompt 组装
 
 **创建文件**：
-- `mysql_mcp/llm/prompt.py`
+- `src/llm/prompt.py`
 - `tests/test_prompt_builder.py`
 
 **实现内容**：
@@ -289,7 +289,7 @@
 **目标**：实现 AI 辅助的 SQL 和结果验证
 
 **创建文件**：
-- `mysql_mcp/llm/validator.py`
+- `src/llm/validator.py`
 - `tests/test_ai_validator.py`
 
 **实现内容**：
@@ -313,8 +313,8 @@
 **目标**：实现两个无复杂处理逻辑的 Tool
 
 **创建文件**：
-- `mysql_mcp/tools/list_databases.py`
-- `mysql_mcp/tools/describe_schema.py`
+- `src/tools/list_databases.py`
+- `src/tools/describe_schema.py`
 - `tests/test_tools_simple.py`
 
 **实现内容**：
@@ -343,7 +343,7 @@
 **目标**：实现用户直接提供 SQL 执行的 Tool
 
 **创建文件**：
-- `mysql_mcp/tools/execute_sql.py`
+- `src/tools/execute_sql.py`
 - `tests/test_execute_sql.py`
 
 **实现内容**：
@@ -366,7 +366,7 @@
 **目标**：实现完整的自然语言查询流水线
 
 **创建文件**：
-- `mysql_mcp/tools/query.py`
+- `src/tools/query.py`
 - `tests/test_query.py`
 
 **实现内容**：
@@ -402,8 +402,8 @@
 **目标**：组装 FastMCP Server，接入 Lifespan 和 Tool 注册
 
 **创建文件**：
-- `mysql_mcp/server.py`
-- `mysql_mcp/__main__.py`
+- `src/server.py`
+- `src/__main__.py`
 - `tests/test_server.py`
 
 **实现内容**：
@@ -425,7 +425,7 @@
 - `if __name__ == "__main__": main()`
 
 **验证**：
-- 启动服务 `python -m mysql_mcp`，通过 MCP Client 调用各 Tool
+- 启动服务 `python -m src`，通过 MCP Client 调用各 Tool
 - 验证 Lifespan 正确初始化和清理
 - 验证 `Ctrl+C` 能优雅关闭
 
@@ -470,10 +470,10 @@
 **目标**：统一错误处理，完善日志记录
 
 **修改文件**：
-- `mysql_mcp/tools/query.py`
-- `mysql_mcp/tools/execute_sql.py`
-- `mysql_mcp/db/pool.py`
-- `mysql_mcp/server.py`
+- `src/tools/query.py`
+- `src/tools/execute_sql.py`
+- `src/db/pool.py`
+- `src/server.py`
 
 **实现内容**：
 - 定义统一的错误响应格式（`ErrorResponse`）
@@ -498,8 +498,8 @@
 **目标**：添加健康检查能力，确保优雅关闭
 
 **修改文件**：
-- `mysql_mcp/server.py`
-- `mysql_mcp/__main__.py`
+- `src/server.py`
+- `src/__main__.py`
 
 **实现内容**：
 - 添加 `health_check` MCP Tool：

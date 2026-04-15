@@ -6,7 +6,7 @@ import logging
 
 import aiomysql
 
-from mysql_mcp.config import MySQLConfig
+from src.config import MySQLConfig
 
 logger = logging.getLogger(__name__)
 

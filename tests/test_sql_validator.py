@@ -1,10 +1,10 @@
-"""Tests for mysql_mcp.security.validator."""
+"""Tests for src.security.validator."""
 
 from __future__ import annotations
 
 import pytest
 
-from mysql_mcp.security.validator import SQLValidationError, SQLValidator
+from src.security.validator import SQLValidationError, SQLValidator
 
 
 @pytest.fixture()

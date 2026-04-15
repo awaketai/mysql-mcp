@@ -1,4 +1,4 @@
-"""Tests for mysql_mcp.llm.client."""
+"""Tests for src.llm.client."""
 
 from __future__ import annotations
 
@@ -6,8 +6,8 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
-from mysql_mcp.config import OpenAIConfig
-from mysql_mcp.llm.client import LLMClient, _extract_sql
+from src.config import OpenAIConfig
+from src.llm.client import LLMClient, _extract_sql
 
 
 @pytest.fixture()
@@ -58,7 +58,7 @@ class TestLLMClientGenerateSQL:
         mock_response = MagicMock()
         mock_response.choices = [mock_choice]
 
-        with patch("mysql_mcp.llm.client.AsyncOpenAI") as mock_openai_cls:
+        with patch("src.llm.client.AsyncOpenAI") as mock_openai_cls:
             mock_client = AsyncMock()
             mock_client.chat.completions.create = AsyncMock(return_value=mock_response)
             mock_client.close = AsyncMock()
@@ -77,7 +77,7 @@ class TestLLMClientGenerateSQL:
         mock_response = MagicMock()
         mock_response.choices = [MagicMock(message=mock_message)]
 
-        with patch("mysql_mcp.llm.client.AsyncOpenAI") as mock_openai_cls:
+        with patch("src.llm.client.AsyncOpenAI") as mock_openai_cls:
             mock_client = AsyncMock()
             mock_client.chat.completions.create = AsyncMock(return_value=mock_response)
             mock_client.close = AsyncMock()
@@ -99,7 +99,7 @@ class TestLLMClientVerifyResult:
         mock_response = MagicMock()
         mock_response.choices = [MagicMock(message=mock_message)]
 
-        with patch("mysql_mcp.llm.client.AsyncOpenAI") as mock_openai_cls:
+        with patch("src.llm.client.AsyncOpenAI") as mock_openai_cls:
             mock_client = AsyncMock()
             mock_client.chat.completions.create = AsyncMock(return_value=mock_response)
             mock_client.close = AsyncMock()
@@ -116,7 +116,7 @@ class TestLLMClientVerifyResult:
         mock_response = MagicMock()
         mock_response.choices = [MagicMock(message=mock_message)]
 
-        with patch("mysql_mcp.llm.client.AsyncOpenAI") as mock_openai_cls:
+        with patch("src.llm.client.AsyncOpenAI") as mock_openai_cls:
             mock_client = AsyncMock()
             mock_client.chat.completions.create = AsyncMock(return_value=mock_response)
             mock_client.close = AsyncMock()

@@ -18,7 +18,7 @@ Read the design doc before implementing. It contains the full Pydantic models, I
 ## Architecture
 
 ```
-mysql_mcp/
+src/
 ├── server.py          # FastMCP instance, lifespan, tool registration
 ├── config.py          # Pydantic Settings (env vars: MYSQL_*, OPENAI_*)
 ├── db/
@@ -120,7 +120,7 @@ All config via environment variables (Pydantic Settings). Key vars:
 
 ```bash
 # Run the MCP server (stdio transport)
-python -m mysql_mcp
+python -m src
 
 # Install dependencies (once pyproject.toml exists)
 pip install -e ".[dev]"

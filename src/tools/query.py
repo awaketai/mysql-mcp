@@ -6,18 +6,18 @@ import logging
 
 from fastmcp import Context
 
-from mysql_mcp.db.pool import execute_query
-from mysql_mcp.db.schema import SchemaManager
-from mysql_mcp.llm.client import LLMClient
-from mysql_mcp.llm.prompt import PromptBuilder
-from mysql_mcp.llm.validator import AIResultValidator
-from mysql_mcp.models.response import (
+from src.db.pool import execute_query
+from src.db.schema import SchemaManager
+from src.llm.client import LLMClient
+from src.llm.prompt import PromptBuilder
+from src.llm.validator import AIResultValidator
+from src.models.response import (
     BothResponse,
     ErrorResponse,
     SQLResponse,
     SQLResult,
 )
-from mysql_mcp.security.validator import SQLValidationError, SQLValidator
+from src.security.validator import SQLValidationError, SQLValidator
 
 logger = logging.getLogger(__name__)
 

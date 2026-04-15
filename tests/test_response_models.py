@@ -1,8 +1,8 @@
-"""Tests for mysql_mcp.models.response."""
+"""Tests for src.models.response."""
 
 from __future__ import annotations
 
-from mysql_mcp.models.response import (
+from src.models.response import (
     BothResponse,
     DescribeSchemaResponse,
     ErrorResponse,

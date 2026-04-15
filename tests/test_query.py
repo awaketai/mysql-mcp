@@ -7,14 +7,14 @@ from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
-from mysql_mcp.config import AppConfig
-from mysql_mcp.models.schema import (
+from src.config import AppConfig
+from src.models.schema import (
     ColumnInfo,
     DatabaseSchema,
     SchemaCache,
     TableSchema,
 )
-from mysql_mcp.tools.query import query
+from src.tools.query import query
 
 
 def _make_ctx(lifespan_context: dict) -> MagicMock:

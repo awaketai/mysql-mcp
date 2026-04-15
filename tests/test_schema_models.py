@@ -1,8 +1,8 @@
-"""Tests for mysql_mcp.models.schema."""
+"""Tests for src.models.schema."""
 
 from __future__ import annotations
 
-from mysql_mcp.models.schema import (
+from src.models.schema import (
     ColumnInfo,
     DatabaseSchema,
     EnumTypeInfo,

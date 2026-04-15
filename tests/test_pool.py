@@ -1,4 +1,4 @@
-"""Tests for mysql_mcp.db.pool."""
+"""Tests for src.db.pool."""
 
 from __future__ import annotations
 
@@ -7,8 +7,8 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
-from mysql_mcp.config import MySQLConfig
-from mysql_mcp.db.pool import close_pool, create_pool, execute_query
+from src.config import MySQLConfig
+from src.db.pool import close_pool, create_pool, execute_query
 
 
 @pytest.fixture()
@@ -23,7 +23,7 @@ class TestCreatePool:
     async def test_creates_pool_with_config(self, mysql_config: MySQLConfig) -> None:
         mock_pool = MagicMock()
         with patch(
-            "mysql_mcp.db.pool.aiomysql.create_pool",
+            "src.db.pool.aiomysql.create_pool",
             return_value=mock_pool,
             new_callable=AsyncMock,
         ) as mock_create:
