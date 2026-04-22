@@ -102,5 +102,4 @@ class TestAppConfig:
         assert cfg.default_database is None
         assert cfg.schema_refresh_interval == 0
         assert cfg.max_limit == 1000
-        assert cfg.schema_token_budget == 4000
         assert cfg.log_level == "INFO"

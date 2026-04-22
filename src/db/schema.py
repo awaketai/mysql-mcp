@@ -162,63 +162,6 @@ class SchemaManager:
         self._refresh_task = asyncio.create_task(_loop())
         return self._refresh_task
 
-    def find_candidate_tables(self, user_input: str, database: str) -> list[str]:
-        """Two-stage candidate-table filtering for prompt construction.
-
-        Matching strategies (in order):
-        1. Direct match: tokens that exactly match a table or column name.
-        2. Keyword match: tokens that appear in table/column comments.
-        3. FK expansion: tables linked to candidates via foreign keys.
-        4. Fallback: return all table names if no candidates found.
-        """
-        db = self._cache.databases.get(database)
-        if db is None:
-            return []
-
-        tokens = _tokenize(user_input)
-        candidates: set[str] = set()
-
-        # Stage 1 & 2: match against names and comments
-        for table_name, table in db.tables.items():
-            table_lower = table_name.lower()
-            # Table comment
-            comment_parts = (table.comment or "").lower()
-            for col in table.columns:
-                comment_parts += " " + (col.comment or "").lower()
-
-            for token in tokens:
-                token_lower = token.lower()
-                # Direct table name match
-                if token_lower == table_lower:
-                    candidates.add(table_name)
-                # Direct column name match
-                elif any(col.name.lower() == token_lower for col in table.columns):
-                    candidates.add(table_name)
-                # Keyword match against comments
-                elif token_lower in comment_parts:
-                    candidates.add(table_name)
-
-        # Stage 3: FK expansion
-        expanded = set(candidates)
-        for table_name in list(candidates):
-            table = db.tables.get(table_name)
-            if not table:
-                continue
-            for fk in table.foreign_keys:
-                expanded.add(fk.ref_table)
-            # Also add tables that reference this one
-            for other_name, other_table in db.tables.items():
-                for fk in other_table.foreign_keys:
-                    if fk.ref_table == table_name:
-                        expanded.add(other_name)
-        candidates = expanded
-
-        # Stage 4: fallback
-        if not candidates:
-            return list(db.tables.keys())
-
-        return sorted(candidates)
-
     # ------------------------------------------------------------------
     # Database query helpers
     # ------------------------------------------------------------------
@@ -411,12 +354,3 @@ class SchemaManager:
             for table_name in db.tables:
                 index.setdefault(table_name, []).append(db_name)
         self._cache.table_index = index
-
-
-def _tokenize(text: str) -> list[str]:
-    """Split user input into candidate tokens for table/column matching.
-
-    Splits on whitespace and common punctuation, preserving terms that
-    could be table/column names or keywords.
-    """
-    return [t for t in re.split(r"[\s,;:!?.()\"'`\[\]{}]+", text) if t]

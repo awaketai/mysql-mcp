@@ -3,15 +3,15 @@
 from __future__ import annotations
 
 import logging
+import os
 
-from src.config import AppConfig
 from src.server import mcp
 
 
 def main() -> None:
-    config = AppConfig()
+    log_level = os.environ.get("LOG_LEVEL", "INFO").upper()
     logging.basicConfig(
-        level=getattr(logging, config.log_level.upper(), logging.INFO),
+        level=getattr(logging, log_level, logging.INFO),
         format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
     )
     mcp.run()

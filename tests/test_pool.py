@@ -110,13 +110,13 @@ class TestExecuteQuery:
 
     @pytest.mark.asyncio()
     async def test_sets_timeout(self) -> None:
-        executed_sqls: list[str] = []
+        execute_calls: list[tuple] = []
 
         mock_cursor = AsyncMock()
         mock_cursor.description = [("x",)]
         mock_cursor.fetchall = AsyncMock(return_value=[])
         mock_cursor.execute = AsyncMock(
-            side_effect=lambda sql: executed_sqls.append(sql),
+            side_effect=lambda sql, params=None: execute_calls.append((sql, params)),
         )
 
         mock_conn = AsyncMock()
@@ -130,4 +130,4 @@ class TestExecuteQuery:
 
         await execute_query(pool, "SELECT 1", timeout=60)
 
-        assert "SET SESSION max_execution_time = 60000" in executed_sqls
+        assert execute_calls[0] == ("SET SESSION max_execution_time = %s", (60000,))

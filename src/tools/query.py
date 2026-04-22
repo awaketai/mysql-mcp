@@ -6,11 +6,11 @@ import logging
 
 from fastmcp import Context
 
+from src.config import AppConfig
 from src.db.pool import execute_query
 from src.db.schema import SchemaManager
 from src.llm.client import LLMClient
 from src.llm.prompt import PromptBuilder
-from src.llm.validator import AIResultValidator
 from src.models.response import (
     BothResponse,
     ErrorResponse,
@@ -37,7 +37,7 @@ async def query(
         database: Optional target database name.
         return_type: What to return — 'sql', 'result', or 'both'. Defaults to 'result'.
     """
-    config = ctx.lifespan_context["config"]
+    config: AppConfig = ctx.lifespan_context["config"]
     pool = ctx.lifespan_context["pool"]
     schema_manager: SchemaManager = ctx.lifespan_context["schema_manager"]
     llm_client: LLMClient = ctx.lifespan_context["llm_client"]
@@ -51,6 +51,14 @@ async def query(
         return ErrorResponse(
             error="database_required",
             message="Could not determine the target database. Please specify one.",
+        ).model_dump()
+
+    # Step 1.5: enforce allowed_databases whitelist
+    if not _is_database_allowed(db_name, schema_manager, config):
+        return ErrorResponse(
+            error="access_denied",
+            message=f"Database '{db_name}' is not in the allowed list",
+            detail=f"Allowed databases: {list(schema_manager.cache.databases.keys())}",
         ).model_dump()
 
     # Step 2: candidate-table filtering
@@ -129,11 +137,22 @@ async def query(
 # ---------------------------------------------------------------------------
 
 
+def _is_database_allowed(
+    db_name: str,
+    schema_manager: SchemaManager,
+    config: AppConfig,
+) -> bool:
+    """Check whether *db_name* is in the allowed databases."""
+    if config.allowed_databases:
+        return db_name in config.allowed_databases
+    return db_name in schema_manager.cache.databases
+
+
 def _resolve_database(
     database: str | None,
     user_input: str,
     schema_manager: SchemaManager,
-    config: object,
+    config: AppConfig,
 ) -> str | None:
     """Resolve the target database from explicit arg, table-index inference, or config default."""
     if database:

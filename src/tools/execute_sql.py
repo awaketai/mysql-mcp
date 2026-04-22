@@ -6,7 +6,9 @@ import logging
 
 from fastmcp import Context
 
+from src.config import AppConfig
 from src.db.pool import execute_query
+from src.db.schema import SchemaManager
 from src.models.response import ErrorResponse, SQLResult
 from src.security.validator import SQLValidationError, SQLValidator
 
@@ -24,14 +26,22 @@ async def execute_sql(
         sql: SQL statement to execute (SELECT only).
         database: Optional target database name.
     """
-    config = ctx.lifespan_context["config"]
+    config: AppConfig = ctx.lifespan_context["config"]
     pool = ctx.lifespan_context["pool"]
-    schema_manager = ctx.lifespan_context["schema_manager"]
+    schema_manager: SchemaManager = ctx.lifespan_context["schema_manager"]
 
     logger.info("execute_sql: db=%s, sql=%s", database, sql[:100])
 
     # Resolve database
-    db_name = _resolve_database(database, schema_manager, config)
+    db_name = _resolve_database(database, config)
+
+    # Enforce allowed_databases whitelist
+    if db_name and not _is_database_allowed(db_name, schema_manager, config):
+        return ErrorResponse(
+            error="access_denied",
+            message=f"Database '{db_name}' is not in the allowed list",
+            detail=f"Allowed databases: {list(schema_manager.cache.databases.keys())}",
+        ).model_dump()
 
     # Validate SQL
     validator = SQLValidator()
@@ -71,10 +81,20 @@ async def execute_sql(
 
 def _resolve_database(
     database: str | None,
-    schema_manager: object,
-    config: object,
+    config: AppConfig,
 ) -> str | None:
     """Resolve the target database name."""
     if database:
         return database
-    return getattr(config, "default_database", None)
+    return config.default_database
+
+
+def _is_database_allowed(
+    db_name: str,
+    schema_manager: SchemaManager,
+    config: AppConfig,
+) -> bool:
+    """Check whether *db_name* is in the allowed databases."""
+    if config.allowed_databases:
+        return db_name in config.allowed_databases
+    return db_name in schema_manager.cache.databases

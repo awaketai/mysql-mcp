@@ -8,7 +8,7 @@ from unittest.mock import AsyncMock, MagicMock
 import pytest
 
 from src.config import AppConfig
-from src.models.schema import SchemaCache
+from src.models.schema import DatabaseSchema, SchemaCache
 from src.tools.execute_sql import execute_sql
 
 
@@ -76,7 +76,7 @@ class TestExecuteSQL:
     async def test_valid_select(self, app_config: AppConfig) -> None:
         pool = _MockPool(["id", "name"], [(1, "alice"), (2, "bob")])
         schema_manager = MagicMock()
-        schema_manager.cache = SchemaCache()
+        schema_manager.cache = SchemaCache(databases={"shop": DatabaseSchema(name="shop")})
         ctx = _make_ctx({"config": app_config, "pool": pool, "schema_manager": schema_manager})
 
         result = await execute_sql(sql="SELECT id, name FROM users", database="shop", ctx=ctx)
@@ -89,7 +89,7 @@ class TestExecuteSQL:
     async def test_rejects_insert(self, app_config: AppConfig) -> None:
         pool = _MockPool([], [])
         schema_manager = MagicMock()
-        schema_manager.cache = SchemaCache()
+        schema_manager.cache = SchemaCache(databases={"shop": DatabaseSchema(name="shop")})
         ctx = _make_ctx({"config": app_config, "pool": pool, "schema_manager": schema_manager})
 
         result = await execute_sql(sql="INSERT INTO users VALUES (1, 'alice')", ctx=ctx)
@@ -101,7 +101,7 @@ class TestExecuteSQL:
     async def test_rejects_delete(self, app_config: AppConfig) -> None:
         pool = _MockPool([], [])
         schema_manager = MagicMock()
-        schema_manager.cache = SchemaCache()
+        schema_manager.cache = SchemaCache(databases={"shop": DatabaseSchema(name="shop")})
         ctx = _make_ctx({"config": app_config, "pool": pool, "schema_manager": schema_manager})
 
         result = await execute_sql(sql="DELETE FROM users", ctx=ctx)
@@ -112,7 +112,7 @@ class TestExecuteSQL:
     async def test_uses_default_database(self, app_config: AppConfig) -> None:
         pool = _MockPool(["x"], [(42,)])
         schema_manager = MagicMock()
-        schema_manager.cache = SchemaCache()
+        schema_manager.cache = SchemaCache(databases={"shop": DatabaseSchema(name="shop")})
         ctx = _make_ctx({"config": app_config, "pool": pool, "schema_manager": schema_manager})
 
         result = await execute_sql(sql="SELECT 42", ctx=ctx)

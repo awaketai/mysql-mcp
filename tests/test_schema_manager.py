@@ -8,7 +8,8 @@ from unittest.mock import MagicMock
 import pytest
 
 from src.config import AppConfig
-from src.db.schema import SchemaManager, _parse_enum_values, _tokenize
+from src.db.schema import SchemaManager, _parse_enum_values
+from src.llm.prompt import PromptBuilder, _tokenize
 from src.models.schema import (
     ColumnInfo,
     DatabaseSchema,
@@ -253,7 +254,8 @@ class TestFindCandidateTables:
         manager = SchemaManager(pool, app_config)  # type: ignore[arg-type]
         await manager.load_all()
 
-        candidates = manager.find_candidate_tables("show all users", "shop")
+        builder = PromptBuilder(manager.cache)
+        candidates = builder.find_candidate_tables("show all users", "shop")
         assert "users" in candidates
 
     @pytest.mark.asyncio()
@@ -262,7 +264,8 @@ class TestFindCandidateTables:
         manager = SchemaManager(pool, app_config)  # type: ignore[arg-type]
         await manager.load_all()
 
-        candidates = manager.find_candidate_tables("show me the name", "shop")
+        builder = PromptBuilder(manager.cache)
+        candidates = builder.find_candidate_tables("show me the name", "shop")
         assert "users" in candidates
 
     @pytest.mark.asyncio()
@@ -271,7 +274,8 @@ class TestFindCandidateTables:
         manager = SchemaManager(pool, app_config)  # type: ignore[arg-type]
         await manager.load_all()
 
-        candidates = manager.find_candidate_tables("show user data", "shop")
+        builder = PromptBuilder(manager.cache)
+        candidates = builder.find_candidate_tables("show user data", "shop")
         assert "users" in candidates
 
     @pytest.mark.asyncio()
@@ -302,11 +306,8 @@ class TestFindCandidateTables:
                 ),
             },
         )
-        pool = MagicMock()
-        manager = SchemaManager(pool, app_config)  # type: ignore[arg-type]
-        manager._cache = cache
-
-        candidates = manager.find_candidate_tables("show all orders", "shop")
+        builder = PromptBuilder(cache)
+        candidates = builder.find_candidate_tables("show all orders", "shop")
         assert "orders" in candidates
         assert "users" in candidates
 
@@ -316,13 +317,12 @@ class TestFindCandidateTables:
         manager = SchemaManager(pool, app_config)  # type: ignore[arg-type]
         await manager.load_all()
 
-        candidates = manager.find_candidate_tables("xyzzy nothing matches", "shop")
-        # Fallback returns all tables in the database
+        builder = PromptBuilder(manager.cache)
+        candidates = builder.find_candidate_tables("xyzzy nothing matches", "shop")
         assert "users" in candidates
         assert "orders" in candidates
 
     def test_nonexistent_database(self) -> None:
-        pool = MagicMock()
-        manager = SchemaManager(pool, AppConfig.__new__(AppConfig))  # type: ignore[arg-type]
-        manager._cache = SchemaCache()
-        assert manager.find_candidate_tables("users", "nonexistent") == []
+        cache = SchemaCache()
+        builder = PromptBuilder(cache)
+        assert builder.find_candidate_tables("users", "nonexistent") == []

@@ -46,7 +46,6 @@ class AppConfig(BaseSettings):
     schema_refresh_interval: int = Field(default=0, alias="SCHEMA_REFRESH_INTERVAL")
     query_timeout: int = Field(default=30, alias="QUERY_TIMEOUT")
     max_limit: int = Field(default=1000, alias="MAX_LIMIT")
-    schema_token_budget: int = Field(default=4000, alias="SCHEMA_TOKEN_BUDGET")
     log_level: str = Field(default="INFO", alias="LOG_LEVEL")
 
     model_config = {"env_prefix": "", "populate_by_name": True}

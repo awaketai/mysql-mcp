@@ -77,7 +77,6 @@ def _make_ctx(
 ) -> MagicMock:
     schema_manager = MagicMock()
     schema_manager.cache = cache
-    schema_manager.find_candidate_tables = MagicMock(return_value=list(cache.databases["shop"].tables.keys()))
 
     llm_client = AsyncMock()
     llm_client.generate_sql = AsyncMock(return_value=llm_sql)

@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
-from src.models.schema import ColumnInfo, DatabaseSchema, SchemaCache, TableSchema
+import re
+
+from src.models.schema import DatabaseSchema, SchemaCache, TableSchema
 
 SYSTEM_TEMPLATE = """\
 You are an expert MySQL SQL generator. Given a natural language query \
@@ -187,4 +189,4 @@ def _comment_blob(table: TableSchema) -> str:
 
 def _tokenize(text: str) -> list[str]:
     """Split user input into candidate tokens."""
-    return [t for t in __import__("re").split(r"[\s,;:!?.()\"'`\[\]{}]+", text) if t]
+    return [t for t in re.split(r"[\s,;:!?.()\"'`\[\]{}]+", text) if t]
